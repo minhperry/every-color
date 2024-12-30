@@ -223,11 +223,11 @@ export function useUUIDSearch({ virtualPosition, displayedUUIDs }) {
 
   const searchUUID = React.useCallback(
     (input) => {
-      const invalid = input.toLowerCase().replace(/[^0-9a-f]/g, "");
+      const invalid = input.toLowerCase().replace(/[^0-9a-f#]/g, "");
       if (invalid !== input) {
         return null;
       }
-      const newSearch = input.toLowerCase().replace(/[^0-9a-f]/g, "");
+      const newSearch = input.toLowerCase().replace(/[^0-9a-f#]/g, "");
       if (!newSearch) return null;
 
       // Clear next states stack when search changes
