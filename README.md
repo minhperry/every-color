@@ -1,4 +1,3 @@
-# Every UUID Dot Com
-A searchable list of every UUID, just in case you've forgotten one and need to look it up.
+# Every Color
 
-Find it at [everyuuid.com](https://everyuuid.com)
+Every color you can find. Forked from Nolen's [Every UUID](https://everyuuid.com)
