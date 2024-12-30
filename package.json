@@ -1,5 +1,5 @@
 {
-  "name": "every-uuid",
+  "name": "every-color",
   "version": "1.0.0",
   "description": "in case I forget one",
   "scripts": {
@@ -11,7 +11,7 @@
     "new-component": "new-component"
   },
   "keywords": [],
-  "author": "nolen (eieio)",
+  "author": "minhperry",
   "license": "ISC",
   "dependencies": {
     "eslint": "^8.57.1",
