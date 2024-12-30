@@ -9,6 +9,7 @@ import {
   WIDTH_TO_SHOW_DOUBLE_HEIGHT,
 } from "../../../lib/constants";
 import { ClipboardCopy, Star } from "../Icons";
+import {colorToRGBA} from "../../../lib/uuidTools";
 
 const BaseButton = styled(UnstyledButton)`
   height: 100%;
@@ -114,7 +115,7 @@ const RowWrapper = styled.div`
   display: grid;
   padding: 0.25rem 0;
 
-  grid-template-areas: "index colon uuid copy favorite copied";
+  grid-template-areas: "index color uuid copy favorite rgba copied";
   grid-template-rows: 100%;
   grid-template-columns: repeat(5, fit-content(15px));
   gap: 0.25rem 0.5rem;
@@ -253,10 +254,25 @@ const Highlight = styled.span`
   background-color: yellow;
 `;
 
+const Showcaser = styled.div`
+  grid-area: color;
+  display: inline-block;
+  background-position: 0px 0px, 10px 10px;
+  background-size: 20px 20px;
+  background-image: linear-gradient(45deg, #eee 25%, transparent 25%, transparent 75%, #eee 75%, #eee 100%),linear-gradient(45deg, #eee 25%, white 25%, white 75%, #eee 75%, #eee 100%);
+  border: 1px solid;
+  border-radius: 0.25rem;
+`
+
 const ColorBox = styled.div`
-  width: 50px;
-  height: 20px;
-  outline: 1px solid ;
+  width: 13rem;
+  height: 22px;
+`
+
+const RGBA = styled.div`
+  width: 16rem;
+  grid-area: rgba;
+  margin-left: 1.3rem;
 `
 
 function Row({
@@ -347,13 +363,16 @@ function Row({
         backgroundColor: mouseDown ? "var(--slate-500)" : null,
       }}
     >
+      <Showcaser>
+        <ColorBox style={{backgroundColor: UUIDToDisplay}} />
+      </Showcaser>
+      <RGBA>{colorToRGBA(UUIDToDisplay)}</RGBA>
       <IndexWithPadding style={{ gridArea: "index" }}>
         <Padding>{padding}</Padding>
         <Index>{indexString}</Index>
       </IndexWithPadding>
       <Colon />
       <UUID>{UUIDToDisplay}</UUID>
-      <ColorBox style={{backgroundColor: uuid}} />
       <CopyButton onClick={handleCopy} $rowMouseDown={mouseDown}>
         <ClipboardCopy style={{ height: "100%", aspectRatio: 1 }} />
       </CopyButton>
