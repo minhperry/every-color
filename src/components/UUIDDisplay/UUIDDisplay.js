@@ -1,12 +1,10 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
 import UnstyledButton from "../UnstyledButton/UnstyledButton";
-import { indexToColor, intToUUID } from "../../../lib/uuidTools";
 import {
   querySmallScreen,
   queryVerySmallScreen,
   SCROLLBAR_WIDTH,
-  MAX_UUID,
   ITEM_HEIGHT,
   WIDTH_TO_SHOW_DOUBLE_HEIGHT,
 } from "../../../lib/constants";
@@ -255,6 +253,12 @@ const Highlight = styled.span`
   background-color: yellow;
 `;
 
+const ColorBox = styled.div`
+  width: 50px;
+  height: 20px;
+  outline: 1px solid ;
+`
+
 function Row({
   index,
   uuid,
@@ -349,6 +353,7 @@ function Row({
       </IndexWithPadding>
       <Colon />
       <UUID>{UUIDToDisplay}</UUID>
+      <ColorBox style={{backgroundColor: uuid}} />
       <CopyButton onClick={handleCopy} $rowMouseDown={mouseDown}>
         <ClipboardCopy style={{ height: "100%", aspectRatio: 1 }} />
       </CopyButton>
