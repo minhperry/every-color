@@ -1,14 +1,10 @@
 import React from "react";
-import { uuidToIndex, indexToUUID } from "../lib/uuidTools";
+import { colorToIndex, indexToColor } from "../lib/uuidTools";
 import { MAX_UUID } from "../lib/constants";
 const PADDING_SENTINEL = "X";
-const VARIANT_SENTINEL = "V";
-const VERSION = "4";
-const VALID_VARIANTS = ["8", "9", "a", "b"];
 
 function getPatternWithPadding(search, leftPadding) {
-  const uuidTemplate = `${PADDING_SENTINEL.repeat(8)}-${PADDING_SENTINEL.repeat(4)}-${VERSION}${PADDING_SENTINEL.repeat(3)}-${VARIANT_SENTINEL}${PADDING_SENTINEL.repeat(3)}-${PADDING_SENTINEL.repeat(12)}`;
-
+  const uuidTemplate = '#00000000';
   for (let pos = 0; pos < search.length; pos++) {
     const patternPos = leftPadding + pos;
     const inputChar = search[pos];
@@ -20,14 +16,6 @@ function getPatternWithPadding(search, leftPadding) {
     ) {
       return null;
     }
-
-    if (patternPos === 14 && inputChar !== VERSION) {
-      return null;
-    }
-
-    if (patternPos === 19 && !VALID_VARIANTS.includes(inputChar)) {
-      return null;
-    }
   }
 
   const pattern =
@@ -35,13 +23,9 @@ function getPatternWithPadding(search, leftPadding) {
     search +
     uuidTemplate.slice(leftPadding + search.length);
 
-  const sections = pattern.split("-");
+  const sections = pattern.split("");
   if (
-    sections[0].length === 8 &&
-    sections[1].length === 4 &&
-    sections[2].length === 4 &&
-    sections[3].length === 4 &&
-    sections[4].length === 12
+    sections.length === 9
   ) {
     return pattern;
   }
@@ -51,8 +35,7 @@ function getPatternWithPadding(search, leftPadding) {
 
 function getAllValidPatterns(search) {
   const patterns = [];
-  const uuidTemplate = `${PADDING_SENTINEL.repeat(8)}-${PADDING_SENTINEL.repeat(4)}-${VERSION}${PADDING_SENTINEL.repeat(3)}-${VARIANT_SENTINEL}${PADDING_SENTINEL.repeat(3)}-${PADDING_SENTINEL.repeat(12)}`;
-
+  const uuidTemplate = '#00000000'
   for (
     let leftPadding = 0;
     leftPadding < uuidTemplate.length - search.length + 1;
@@ -68,15 +51,37 @@ function getAllValidPatterns(search) {
 }
 
 function generateRandomUUID(pattern) {
-  return pattern
-    .replace(
-      new RegExp(VARIANT_SENTINEL, "g"),
-      () => VALID_VARIANTS[Math.floor(Math.random() * VALID_VARIANTS.length)]
-    )
-    .replace(
-      new RegExp(PADDING_SENTINEL, "g"),
-      () => "0123456789abcdef"[Math.floor(Math.random() * 16)]
-    );
+  for (let attempt = 0; attempt < 100; attempt++) {
+    const result = pattern
+      .replace(
+        new RegExp(PADDING_SENTINEL, "g"),
+        () => "0123456789abcdef"[Math.floor(Math.random() * 16)]
+      );
+
+    // Validate the generated color
+    const [r, g, b, a] = [
+      parseInt(result.slice(1, 3), 16),
+      parseInt(result.slice(3, 5), 16),
+      parseInt(result.slice(5, 7), 16),
+      parseInt(result.slice(7, 9), 16),
+    ];
+
+    // Check RGB values (0–255)
+    if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255) {
+      continue;
+    }
+
+    // Check Alpha (0–255, representing 0.0–1.0 in steps of 1/255)
+    if (a < 0 || a > 255) {
+      continue;
+    }
+
+    return result;
+  }
+
+  // If we couldn't generate a valid color after max attempts, return a default valid color
+  console.warn("Could not generate valid RGBA color after max attempts");
+  return "#000000FF"; // Default: black with full opacity
 }
 
 const SEARCH_LOOKBACK = 50;
@@ -101,7 +106,7 @@ export function useUUIDSearch({ virtualPosition, displayedUUIDs }) {
           if (index < 0n) {
             index = MAX_UUID + index;
           }
-          const uuid = indexToUUID(index);
+          const uuid = indexToColor(index);
           prev.push({ index, uuid });
         }
         return prev;
@@ -127,7 +132,7 @@ export function useUUIDSearch({ virtualPosition, displayedUUIDs }) {
           if (index > MAX_UUID) {
             index = index - MAX_UUID;
           }
-          const uuid = indexToUUID(index);
+          const uuid = indexToColor(index);
           next.push({ index, uuid });
         }
         return next;
@@ -182,7 +187,7 @@ export function useUUIDSearch({ virtualPosition, displayedUUIDs }) {
         const { pattern, leftPadding } =
           patterns[Math.floor(Math.random() * patterns.length)];
         const uuid = generateRandomUUID(pattern);
-        const index = uuidToIndex(uuid);
+        const index = colorToIndex(uuid);
         const satisfiesConstraint = wantHigher
           ? index > compareIndex
           : index < compareIndex;
@@ -210,7 +215,7 @@ export function useUUIDSearch({ virtualPosition, displayedUUIDs }) {
         uuid: generateRandomUUID(fallbackPattern),
         pattern: fallbackPattern,
         leftPadding: fallbackLeftPadding,
-        index: uuidToIndex(uuid),
+        index: colorToIndex(uuid),
       };
     },
     [nextStates, uuid, virtualPosition]
@@ -218,11 +223,11 @@ export function useUUIDSearch({ virtualPosition, displayedUUIDs }) {
 
   const searchUUID = React.useCallback(
     (input) => {
-      const invalid = input.toLowerCase().replace(/[^0-9a-f-]/g, "");
+      const invalid = input.toLowerCase().replace(/[^0-9a-f]/g, "");
       if (invalid !== input) {
         return null;
       }
-      const newSearch = input.toLowerCase().replace(/[^0-9a-f-]/g, "");
+      const newSearch = input.toLowerCase().replace(/[^0-9a-f]/g, "");
       if (!newSearch) return null;
 
       // Clear next states stack when search changes

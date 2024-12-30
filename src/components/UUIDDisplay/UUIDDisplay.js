@@ -1,7 +1,7 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
 import UnstyledButton from "../UnstyledButton/UnstyledButton";
-import { indexToUUID, intToUUID } from "../../../lib/uuidTools";
+import { indexToColor, intToUUID } from "../../../lib/uuidTools";
 import {
   querySmallScreen,
   queryVerySmallScreen,
@@ -265,7 +265,7 @@ function Row({
 }) {
   const indexString = index.toString();
   const length = indexString.length;
-  const padLength = 37;
+  const padLength = 10;
   const paddingLength = padLength - length;
   let padding;
   if (paddingLength < 0) {
