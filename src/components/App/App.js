@@ -6,7 +6,7 @@ import { MAX_UUID } from "../../../lib/constants";
 import UUIDDisplay from "../UUIDDisplay/UUIDDisplay";
 import SearchWidget from "../SearchWidget/SearchWidget";
 import FavoritesWidget from "../FavoritesWidget";
-import { indexToUUID, uuidToIndex } from "../../../lib/uuidTools";
+import { indexToColor, colorToIndex } from "../../../lib/uuidTools";
 
 const Wrapper = styled.div`
   display: flex;
@@ -140,7 +140,7 @@ function App() {
     if (showFavorites) {
       const allUUIDs = Object.keys(favedUUIDs)
         .map((uuid) => {
-          const index = uuidToIndex(uuid);
+          const index = colorToIndex(uuid);
           if (index === null) {
             console.error("no index", uuid);
             return null;
@@ -172,7 +172,7 @@ function App() {
       if (index > MAX_UUID) {
         return null;
       }
-      const uuid = indexToUUID(index);
+      const uuid = indexToColor(index);
       if (!uuid) {
         console.error("no uuid", index);
         return null;
