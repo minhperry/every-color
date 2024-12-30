@@ -8,7 +8,9 @@ import { Code, Twitter, Bsky, Help } from "../Icons/Icons";
 const SUBHEADS = [
   "In case you forgot one",
   "Scroll till you find a good one",
-  "Well, only the V4 ones",
+  "Pick a random one you like",
+  "Yours is in here somewhere",
+  "Find your favorite",
 ];
 
 const Wrapper = styled.header`
@@ -128,27 +130,24 @@ function Header() {
     <Wrapper>
       <TitleSubhead>
         <TitleLink href="/">
-          <Title>Every UUID Dot Com</Title>
+          <Title>Every Color, with Alpha!</Title>
         </TitleLink>
         <Subhead>{subhead}</Subhead>
       </TitleSubhead>
       <SelfPromotion>
         <Socials>
-          <SocialLink href="https://eieio.games/blog/writing-down-every-uuid">
-            <Help />
+          <SocialLink href="https://github.com/minhperry/every-color">
+            <Code/>
           </SocialLink>
-          <SocialLink href="https://github.com/nolenroyalty/every-uuid">
-            <Code />
+          <SocialLink href="https://twitter.com/minhperry">
+            <Twitter/>
           </SocialLink>
-          <SocialLink href="https://twitter.com/itseieio">
-            <Twitter />
-          </SocialLink>
-          <SocialLink href="https://bsky.app/profile/itseieio.bsky.social">
-            <Bsky />
+          <SocialLink href="https://bsky.app/profile/minhperry.de">
+            <Bsky/>
           </SocialLink>
         </Socials>
         <p>
-          A website by <Link href="https://eieio.games">eieio</Link>
+          Forked by minhperry from <Link href="https://eieio.games">eieio</Link>
         </p>
       </SelfPromotion>
     </Wrapper>
