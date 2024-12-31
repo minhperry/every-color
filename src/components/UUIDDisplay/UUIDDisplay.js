@@ -364,9 +364,9 @@ function Row({
       }}
     >
       <Showcaser>
-        <ColorBox style={{backgroundColor: UUIDToDisplay}} />
+        <ColorBox style={{backgroundColor: uuid}} />
       </Showcaser>
-      <RGBA>{colorToRGBA(UUIDToDisplay)}</RGBA>
+      <RGBA>{colorToRGBA(uuid.toString())}</RGBA>
       <IndexWithPadding style={{ gridArea: "index" }}>
         <Padding>{padding}</Padding>
         <Index>{indexString}</Index>
