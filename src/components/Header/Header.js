@@ -142,7 +142,7 @@ function Header() {
           <SocialLink href="https://github.com/minhperry/every-color">
             <Code/>
           </SocialLink>
-          <SocialLink href="https://twitter.com/minhperry">
+          <SocialLink href="https://twitter.com/minhperryy">
             <Twitter/>
           </SocialLink>
           <SocialLink href="https://bsky.app/profile/minhperry.de">
