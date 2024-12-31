@@ -136,6 +136,9 @@ function Header() {
       </TitleSubhead>
       <SelfPromotion>
         <Socials>
+          <SocialLink href="https://blog.minhperry.de/blog/every-color">
+            <Help/>
+          </SocialLink>
           <SocialLink href="https://github.com/minhperry/every-color">
             <Code/>
           </SocialLink>
