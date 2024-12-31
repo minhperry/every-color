@@ -58,6 +58,22 @@ const CopyButton = styled(BaseButton)`
   }
 `;
 
+const CopyButton2 = styled(BaseButton)`
+  grid-area: copy2;
+
+  color: var(--slate-700);
+
+  @media (hover: hover) {
+    &:hover {
+      color: var(--slate-900);
+    }
+  }
+
+  &:active {
+    transform: scale(0.8);
+  }
+`;
+
 const SpinStretch = keyframes`
   0% {
     transform: scale(1) rotate(0deg);
@@ -115,9 +131,9 @@ const RowWrapper = styled.div`
   display: grid;
   padding: 0.25rem 0;
 
-  grid-template-areas: "index color uuid copy favorite rgba copied";
+  grid-template-areas: "index color uuid copy rgba copy2 favorite copied";
   grid-template-rows: 100%;
-  grid-template-columns: repeat(5, fit-content(15px));
+  grid-template-columns: repeat(8, fit-content(15px));
   gap: 0.25rem 0.5rem;
   align-items: center;
 
@@ -257,20 +273,20 @@ const Highlight = styled.span`
 const Showcaser = styled.div`
   grid-area: color;
   display: inline-block;
-  background-position: 0px 0px, 10px 10px;
+  background-position: 0 0, 10px 10px;
   background-size: 20px 20px;
   background-image: linear-gradient(45deg, #eee 25%, transparent 25%, transparent 75%, #eee 75%, #eee 100%),linear-gradient(45deg, #eee 25%, white 25%, white 75%, #eee 75%, #eee 100%);
   border: 1px solid;
-  border-radius: 0.25rem;
+  width: fit-content;
 `
 
 const ColorBox = styled.div`
-  width: 13rem;
-  height: 22px;
+  width: 100px;
+  height: 20px;
 `
 
 const RGBA = styled.div`
-  width: 16rem;
+  // width: 16rem;
   grid-area: rgba;
   margin-left: 1.3rem;
 `
@@ -303,6 +319,22 @@ function Row({
     clearTimeout(timeoutRef.current);
     await navigator.clipboard
       .writeText(uuid)
+      .catch((e) => {
+        console.error("error copying to clipboard", e);
+        setJustCopied(0);
+      })
+      .then(() => {
+        setJustCopied((prev) => prev + 1);
+        timeoutRef.current = setTimeout(() => {
+          setJustCopied(0);
+        }, 1000);
+      });
+  }, [uuid]);
+
+  const handleCopyRGB = React.useCallback(async () => {
+    clearTimeout(timeoutRef.current);
+    await navigator.clipboard
+      .writeText(colorToRGBA(uuid.toString()))
       .catch((e) => {
         console.error("error copying to clipboard", e);
         setJustCopied(0);
@@ -376,6 +408,9 @@ function Row({
       <CopyButton onClick={handleCopy} $rowMouseDown={mouseDown}>
         <ClipboardCopy style={{ height: "100%", aspectRatio: 1 }} />
       </CopyButton>
+      <CopyButton2 onClick={handleCopyRGB}>
+        <ClipboardCopy style={{ height: "100%", aspectRatio: 1 }} />
+      </CopyButton2>
       <FavoriteButton
         $isFaved={isFaved}
         data-just-faved={isFaved && justFaved === uuid}
