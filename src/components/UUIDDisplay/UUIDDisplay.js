@@ -281,7 +281,7 @@ const Showcaser = styled.div`
 `
 
 const ColorBox = styled.div`
-  width: 100px;
+  width: 200px;
   height: 20px;
 `
 
